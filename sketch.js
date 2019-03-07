@@ -26,15 +26,18 @@ function setup() {
 }
 
 function draw() {
+  background(255);
+
   let sortedBodies = [];
   for(var body in bodies) {
     var joints = bodies[body].joints;
-    body.zPos = joints[kinectron.SPINEMID].cameraZ;
+    bodies[body].zPos = joints[kinectron.SPINEMID].cameraZ;
     let handLeft = joints[kinectron.HANDLEFT];
     let handRight = joints[kinectron.HANDRIGHT];
     // Note: don't scale distance to the frame - we want to base our control code on actual distance.
-    body.handsDistance = dist(handLeft.cameraX, handLeft.cameraY, handRight.cameraX, handRight.cameraY);
-    sortedBodies.append(body);
+    bodies[body].handsDistance = dist(handLeft.cameraX, handLeft.cameraY, handRight.cameraX, handRight.cameraY);
+    if (bodies[body].handsDistance)
+      sortedBodies.push(body);
   }
   sortedBodies.sort((a, b) => (a.zPos - b.zPos)); // ascending order by zPos
 
@@ -42,15 +45,15 @@ function draw() {
   let volumeBody = sortedBodies[1];
   // Any other bodies ignored
 
-  let playbackSpeed = scalePlaybackSpeed(playbackSpeedBody.handsDistance);
-  let volume = scaleVolume(volumeBody.handsDistance);
+  let playbackSpeed = playbackSpeedBody ? scalePlaybackSpeed(playbackSpeedBody.handsDistance) : null;
+  let volume = volumeBody ? scaleVolume(volumeBody.handsDistance) : null;
 
   // console.log(``)
 
   textSize(32);
-  text(`front Z: ${playbackSpeedBody.zPos}`, 5, 5);
-  text(`back Z: ${volumeBody.zPos}`, 5, 55);
-  text(`playback speed: ${playback}`, 5, 105);
+  text(`front Z: ${playbackSpeedBody ? playbackSpeedBody.zPos : null}`, 5, 5);
+  text(`back Z: ${volumeBody ? volumeBody.zPos : null}`, 5, 55);
+  text(`playback speed: ${playbackSpeed}`, 5, 105);
   text(`volume: ${volume}`, 5, 155);
 
 function scalePlaybackSpeed(distance) {
