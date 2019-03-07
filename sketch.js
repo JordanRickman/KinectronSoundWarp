@@ -23,20 +23,18 @@ function stop() {
 
 new Tone.Buffer('music.mp3', buffer => {
   console.log('mp3 Buffer loaded.');
-  player = new Tone.BufferSource(buffer, () => {
-    console.log('BufferSource loaded.');
-    let playButton = document.getElementById('playbutton');
-    playButton.innerHTML = 'Play';
-    playButton.addEventListener('click', () => {
-      Tone.start();
-      if (!playing) {
-        play();
-        document.getElementById('playbutton').innerHTML = 'Stop';
-      } else {
-        stop();
-        document.getElementById('playbutton').innerHTML = 'Play';
-      }
-    })
+  player = new Tone.BufferSource(buffer).toMaster();
+  let playButton = document.getElementById('playbutton');
+  playButton.innerHTML = 'Play';
+  playButton.addEventListener('click', () => {
+    Tone.start();
+    if (!playing) {
+      play();
+      document.getElementById('playbutton').innerHTML = 'Stop';
+    } else {
+      stop();
+      document.getElementById('playbutton').innerHTML = 'Play';
+    }
   });
 });
 
