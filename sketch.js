@@ -22,7 +22,9 @@ function stop() {
 }
 
 new Tone.Buffer('music.mp3', buffer => {
+  console.log('mp3 Buffer loaded.');
   player = new Tone.BufferSource(buffer, () => {
+    console.log('BufferSource loaded.');
     let playButton = document.getElementById('playbutton');
     playButton.innerHTML = 'Play';
     playButton.addEventListener('click', () => {
@@ -31,7 +33,7 @@ new Tone.Buffer('music.mp3', buffer => {
         play();
         document.getElementById('playbutton').innerHTML = 'Stop';
       } else {
-        reset();
+        stop();
         document.getElementById('playbutton').innerHTML = 'Play';
       }
     })
@@ -65,7 +67,7 @@ function draw() {
     // Note: don't scale distance to the frame - we want to base our control code on actual distance.
     bodies[body].handsDistance = dist(handLeft.cameraX, handLeft.cameraY, handRight.cameraX, handRight.cameraY);
     if (bodies[body].handsDistance)
-      sortedBodies.push(body);
+      sortedBodies.push(bodies[body]);
   }
   sortedBodies.sort((a, b) => (a.zPos - b.zPos)); // ascending order by zPos
 
@@ -76,16 +78,15 @@ function draw() {
   let playbackSpeed = playbackSpeedBody ? scalePlaybackSpeed(playbackSpeedBody.handsDistance) : null;
   let volume = volumeBody ? scaleVolume(volumeBody.handsDistance) : null;
 
-  // console.log(``)
-
   textSize(32);
   text(`front Z: ${playbackSpeedBody ? playbackSpeedBody.zPos : null}`, 5, 5);
   text(`back Z: ${volumeBody ? volumeBody.zPos : null}`, 5, 55);
   text(`playback speed: ${playbackSpeed}`, 5, 105);
   text(`volume: ${volume}`, 5, 155);
+}
 
 function scalePlaybackSpeed(distance) {
-  return distance; // TODO
+  return map(distance, 0, 1.5, 1.5, 0.5);
 }
 
 function scaleVolume(distance) {
