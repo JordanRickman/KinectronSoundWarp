@@ -7,8 +7,36 @@ Drawing skeleton joints and bones.
 let kinectron = null;
 let bodies = {};
 
-// Variables for circle
-let a = 0;
+// Set up ToneJS
+var playing = false;
+let player;
+
+function play() {
+  player.start();
+  playing = true;
+}
+
+function stop() {
+  player.stop();
+  playing = false;
+}
+
+new Tone.Buffer('music.mp3', buffer => {
+  player = new Tone.BufferSource(buffer, () => {
+    let playButton = document.getElementById('playbutton');
+    playButton.innerHTML = 'Play';
+    playButton.addEventListener('click', () => {
+      Tone.start();
+      if (!playing) {
+        play();
+        document.getElementById('playbutton').innerHTML = 'Stop';
+      } else {
+        reset();
+        document.getElementById('playbutton').innerHTML = 'Play';
+      }
+    })
+  });
+});
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
