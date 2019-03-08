@@ -1,8 +1,3 @@
-/*
-Mimi Yin NYU-ITP
-Drawing skeleton joints and bones.
- */
-
 // Declare kinectron
 let kinectron = null;
 let bodies = {};
