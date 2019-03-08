@@ -81,6 +81,11 @@ function draw() {
   text(`back Z: ${volumeBody ? volumeBody.zPos : null}`, 5, 55);
   text(`playback speed: ${playbackSpeed}`, 5, 105);
   text(`volume: ${volume}`, 5, 155);
+
+  if (player) {
+    player.playbackRate.value = playbackSpeed;
+    Tone.Master.volume.value = volume;
+  }
 }
 
 function scalePlaybackSpeed(distance) {
@@ -88,7 +93,7 @@ function scalePlaybackSpeed(distance) {
 }
 
 function scaleVolume(distance) {
-  return distance; // TODO
+  return map(distance, 0, 1.5, -12, 24);
 }
 
 function bodyTracked(body) {
